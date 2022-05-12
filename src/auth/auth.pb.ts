@@ -6,16 +6,33 @@ import { Observable } from 'rxjs';
 
 export const protobufPackage = 'auth';
 
+export enum UserType {
+  ADMIN = 0,
+  TEACHER = 1,
+  STUDENT = 2,
+  UNRECOGNIZED = -1,
+}
+
+/** Register */
 export interface RegisterRequest {
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
+  type: UserType;
 }
 
 export interface RegisterResponse {
   status: number;
   error: string[];
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  type: UserType;
 }
 
+/** Login */
 export interface LoginRequest {
   email: string;
   password: string;
@@ -27,6 +44,7 @@ export interface LoginResponse {
   token: string;
 }
 
+/** Validate */
 export interface ValidateRequest {
   token: string;
 }
@@ -34,7 +52,11 @@ export interface ValidateRequest {
 export interface ValidateResponse {
   status: number;
   error: string[];
-  userId: number;
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  type: UserType;
 }
 
 export const AUTH_PACKAGE_NAME = 'auth';

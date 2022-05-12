@@ -25,7 +25,15 @@ export class AuthService {
     let auth: Auth = await this.repository.findOne({ where: { email } });
 
     if (auth) {
-      return { status: HttpStatus.CONFLICT, error: ['E-Mail already exists'] };
+      return {
+        email: '',
+        firstName: '',
+        id: 0,
+        lastName: '',
+        type: undefined,
+        status: HttpStatus.CONFLICT,
+        error: ['E-Mail already exists'],
+      };
     }
 
     auth = new Auth();
@@ -35,7 +43,15 @@ export class AuthService {
 
     await this.repository.save(auth);
 
-    return { status: HttpStatus.CREATED, error: null };
+    return {
+      email: '',
+      firstName: '',
+      id: 0,
+      lastName: '',
+      type: undefined,
+      status: HttpStatus.CREATED,
+      error: null,
+    };
   }
 
   public async login({
@@ -79,7 +95,11 @@ export class AuthService {
       return {
         status: HttpStatus.FORBIDDEN,
         error: ['Token is invalid'],
-        userId: null,
+        id: null,
+        type: null,
+        firstName: null,
+        lastName: null,
+        email: null,
       };
     }
 
@@ -87,12 +107,16 @@ export class AuthService {
 
     if (!auth) {
       return {
+        id: null,
+        type: null,
+        firstName: null,
+        lastName: null,
+        email: null,
         status: HttpStatus.CONFLICT,
         error: ['User not found'],
-        userId: null,
       };
     }
 
-    return { status: HttpStatus.OK, error: null, userId: decoded.id };
+    return { status: HttpStatus.OK, error: null, ...auth };
   }
 }
